@@ -1,26 +1,37 @@
-#ifndef Q_STATE_HPP
-#define Q_STATE_HPP
+#ifndef QUANTUM_STATE_HPP
+#define QUANTUM_STATE_HPP
 
-#include "QTypes.hpp"
+#include "QGates.hpp"
+#include <vector>
+#include <cstdint>
+#include <random>
+#include <stdexcept>
 
 namespace QCS
 {
-class QState
-{
-public:
-    uint8_t num_qubits;
-    CVector state;
+    class QState
+    {
+    private:
+        // Applies a single-qubit gate to the specified qubit
+        void apply_single_qubit_gate(const CMatrix& gate, int qubit);
 
-    QState(uint8_t num_qubits);
+    public:
+        uint8_t num_qubits;
+        CVector state;
 
-    void set_state(const CVector &new_state);
+        // Constructor: initializes to |0...0>
+        QState(uint8_t num_qubits_);
 
-    void apply_gate(const CMatrix &gate, const CVector &target_qubits);
+        // Apply a gate to specified target qubits
+        void apply_gate(const CMatrix& gate, const std::vector<int>& target_qubits);
 
-    void measure(const uint8_t target_qubit);
+        // Measure a qubit and collapse the state
+        int measure(int target_qubit);
 
-    void display_state() const;
-};
+        // Display the state vector
+        void display_state() const;
+    };
 }
 
-#endif // Q_STATE_HPP
+#endif // QUANTUM_STATE_HPP
+
